@@ -153,6 +153,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
+    <ClCompile Include="FbxLoader.cpp" />
     <ClCompile Include="FrameWork.cpp" />
     <ClCompile Include="GamePlayScene.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DirectXCommon.h" />
+    <ClInclude Include="FbxLoader.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="GamePlayScene.h" />
     <ClInclude Include="Input.h" />

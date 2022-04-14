@@ -3,6 +3,7 @@
 #include "Audio.h"
 #include "Input.h"
 #include "DebugText.h"
+#include "FbxLoader.h"
 
 void GamePlayScene::Initialize()
 {
@@ -45,6 +46,9 @@ void GamePlayScene::Initialize()
 		object3d_3->SetScale({ 21.0f, 21.0f, 21.0f });
 	
 	
+		//モデルを指定してFBXファイルを読み込み
+		FbxLoader::GetInstance()->LoadModelFromFile("cube");
+
 	//音声読み込みと再生
 	Audio::GetInstance()->PlayMusic("Resources/Music/Alarm01.wav");
 

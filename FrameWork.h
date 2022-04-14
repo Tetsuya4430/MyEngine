@@ -3,6 +3,7 @@
 #include "WinApp.h"
 #include "DirectXCommon.h"
 #include "Object3d.h"
+#include "FbxLoader.h"
 #include "Sprite.h"
 #include "DebugText.h"
 #include "Audio.h"
