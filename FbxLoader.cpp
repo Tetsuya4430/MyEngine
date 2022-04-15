@@ -7,6 +7,8 @@
 /// <param name="winApp"></param>
 const std::string FbxLoader::baseDirectory = "Resources/";
 
+using namespace DirectX;
+
 FbxLoader* FbxLoader::GetInstance()
 {
     static FbxLoader instance;
@@ -61,4 +63,75 @@ void FbxLoader::LoadModelFromFile(const string& modelName)
 
     //ファイルからロードしたFBXの情報をシーンにインポート
     fbxImpoter->Import(fbxScene);
+
+    //モデル生成
+    FbxModel* model = new FbxModel();
+    model->name = modelName;
+
+    //FBXノードの数を取得
+    int nodeCount = fbxScene->GetNodeCount();
+
+    //あらかじめ必要数分のメモリを渡すことで、アドレスがずれるのを予防
+    model->nodes.reserve(nodeCount);
+
+    //ルートノードから順に解析してモデルを流し込む
+    ParseNodeRecursive(model, fbxScene->GetRootNode());
+
+    //FBXシーン解放
+    fbxScene->Destroy();
+}
+
+void FbxLoader::ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode, Node* parent)
+{
+    //モデルにノードを追加
+    model->nodes.emplace_back();
+    Node& node = model->nodes.back();
+
+    //ノード名の取得
+    node.name = fbxNode->GetName();
+
+    //FBXノードのローカル移動情報
+    FbxDouble3 rotation = fbxNode->GeometricRotation.Get();
+    FbxDouble3 scaling = fbxNode->LclScaling.Get();
+    FbxDouble3 translation = fbxNode->GeometricTranslation.Get();
+
+    //形式変換して代入
+    node.rotation = { (float)rotation[0], (float)rotation[1], (float)rotation[2], 0.0f };
+    node.scaling = { (float)scaling[0], (float)scaling[1], (float)scaling[2], 0.0f };
+    node.translation = { (float)translation[0], (float)translation[1], (float)translation[2], 1.0f };
+
+    //回転角をDegree(度)かたラジアンに変換
+    node.rotation.m128_f32[0] = XMConvertToRadians(node.rotation.m128_f32[0]);
+    node.rotation.m128_f32[1] = XMConvertToRadians(node.rotation.m128_f32[1]);
+    node.rotation.m128_f32[2] = XMConvertToRadians(node.rotation.m128_f32[2]);
+
+
+    //スケール、回転、平行移動の計算
+    XMMATRIX matScaling, matRotation, matTranslation;
+
+    matScaling = XMMatrixScalingFromVector(node.scaling);
+    matRotation = XMMatrixRotationRollPitchYawFromVector(node.rotation);
+    matTranslation = XMMatrixTranslationFromVector(node.translation);
+
+    //ローカル変換行列の計算
+    node.transForm = XMMatrixIdentity();
+    node.transForm *= matScaling;   //ワールド行列にスケーリングを反映
+    node.transForm *= matRotation;  //ワールド行列に回転を反映
+    node.transForm *= matTranslation;   //ワールド行列に平行移動を反映
+
+    //グローバル変形行列の計算
+    if (parent)
+    {
+        node.parent = parent;
+        //親の変形を計算
+        node.globalTransform *= parent->globalTransform;
+    }
+
+    //FBXノードのメッシュ情報を解析
+
+    //子ノードに対して再起呼び出し
+    for (int i = 0; i < fbxNode->GetChildCount(); i++)
+    {
+        ParseNodeRecursive(model, fbxNode->GetChild(i), &node);
+    }
 }

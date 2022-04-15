@@ -126,6 +126,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libfbxsdk-md.lib;libxml2-md.lib;zlib-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,6 +146,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libfbxsdk-mt.lib;libxml2-mt.lib;zlib-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -154,6 +156,7 @@
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="FbxLoader.cpp" />
+    <ClCompile Include="FbxModel.cpp" />
     <ClCompile Include="FrameWork.cpp" />
     <ClCompile Include="GamePlayScene.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -227,6 +230,7 @@
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="FbxLoader.h" />
+    <ClInclude Include="FbxModel.h" />
     <ClInclude Include="FrameWork.h" />
     <ClInclude Include="GamePlayScene.h" />
     <ClInclude Include="Input.h" />
