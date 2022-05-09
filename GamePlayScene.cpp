@@ -50,8 +50,8 @@ void GamePlayScene::Initialize()
 		FbxLoader::GetInstance()->LoadModelFromFile("cube");
 
 	//‰¹º“Ç‚Ýž‚Ý‚ÆÄ¶
-	Audio::GetInstance()->PlayMusic("Resources/Music/Alarm01.wav");
-
+	Audio::GetInstance()->LoadWave("Music/Alarm01.wav");
+	Audio::GetInstance()->PlayWave("Music/Alarm01.wav");
 }
 
 void GamePlayScene::Finalize()
