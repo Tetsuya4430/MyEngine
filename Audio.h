@@ -9,21 +9,21 @@
 #include <map>
 #include <string>
 
-// オーディオ audio
+// オーディオ
 class Audio
 {
-private: // エイリアス alias
+private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-public: // サブクラス Subclass
-	// チャンクヘッダ Chunk header
+public: // サブクラス
+	// チャンクヘッダ
 	struct ChunkHeader
 	{
-		char	id[4]; // チャンク毎のID ID for each chunk
-		int32_t		size;  // チャンクサイズ Chunk size
+		char	id[4]; // チャンク毎のID
+		int32_t		size;  // チャンクサイズ
 	};
 
-	// RIFFヘッダチャンク RIFF header chunk
+	// RIFFヘッダチャンク
 	struct RiffHeader
 	{
 		ChunkHeader	chunk;   // "RIFF"
@@ -34,7 +34,7 @@ public: // サブクラス Subclass
 	struct FormatChunk
 	{
 		ChunkHeader		chunk; // "fmt "
-		WAVEFORMATEX	fmt;   // 波形フォーマット Waveform format
+		WAVEFORMATEX	fmt;   // 波形フォーマット
 	};
 
 	//音声データ
@@ -51,12 +51,11 @@ public: // サブクラス Subclass
 	};
 
 
-public: // メンバ関数 Member function
-
+public: // メンバ関数
 	static Audio* GetInstance();
 
-	// 初期化 Initialization
-	void Initialize(const std::string& directoryPath = "Resources/");
+	// 初期化
+	void Initialize(const std::string& directoryPath = "Resources/Music/");
 
 	//解放処理
 	void Finalize();
@@ -67,10 +66,10 @@ public: // メンバ関数 Member function
 	//サウンドデータの解放
 	void UnLoad(SoundData* soundData);
 
-	// サウンドファイルの再生 playing sound files
+	// サウンドファイルの再生
 	void PlayWave(const std::string& filename);
 
-private: // メンバ変数 Member variables
+private: // メンバ変数
 	ComPtr<IXAudio2> xAudio2;
 
 	//サウンドデータの連想配列
