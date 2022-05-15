@@ -51,7 +51,7 @@ void GamePlayScene::Initialize()
 
 	//‰¹º“Ç‚İ‚İ‚ÆÄ¶
 	Audio::GetInstance()->LoadWave("Alarm01.wav");
-	Audio::GetInstance()->PlayWave("Alarm01.wav");
+	/*Audio::GetInstance()->PlayWave("Alarm01.wav");*/
 }
 
 void GamePlayScene::Finalize()
@@ -78,6 +78,11 @@ void GamePlayScene::Update()
 	{
 		//ƒV[ƒ“Ø‚è‘Ö‚¦
 		SceneManager::GetInstance()->ChangeScene("TITLE");
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_A))
+	{
+		Audio::GetInstance()->PlayWave("Alarm01.wav");
 	}
 
 	//À•W‘€ì
