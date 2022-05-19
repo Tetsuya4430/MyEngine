@@ -33,6 +33,8 @@ private:
 	Model* model_2 = nullptr;
 	Input* input = nullptr;
 
+	Camera* camera = nullptr;
+
 	std::shared_ptr<Object3d> object3d_1;
 	std::shared_ptr<Object3d> object3d_2;
 	std::shared_ptr<Object3d> object3d_3;

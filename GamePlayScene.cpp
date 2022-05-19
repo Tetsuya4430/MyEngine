@@ -23,15 +23,15 @@ void GamePlayScene::Initialize()
 	objectManager_3 = std::make_unique<ObjectManager>();
 
 	//オブジェクトマネージャー生成->3Dオブジェクト生成->オブジェクトの参照カウントを増加
-	std::shared_ptr<Object3d> object_1 = Object3d::Create(model_1);
+	std::shared_ptr<Object3d> object_1 = Object3d::Create(model_1, camera);
 	std::weak_ptr<Object3d> ObjectWp_1 = objectManager_1->AddObject(object_1);
 	object3d_1 = ObjectWp_1.lock();
 
-	std::shared_ptr<Object3d> object_2 = Object3d::Create(model_2);
+	std::shared_ptr<Object3d> object_2 = Object3d::Create(model_2, camera);
 	std::weak_ptr<Object3d> ObjectWp_2 = objectManager_2->AddObject(object_2);
 	object3d_2 = ObjectWp_2.lock();
 
-	std::shared_ptr<Object3d> object_3 = Object3d::Create(model_2);
+	std::shared_ptr<Object3d> object_3 = Object3d::Create(model_2, camera);
 	std::weak_ptr<Object3d> ObjectWp_3 = objectManager_3->AddObject(object_3);
 	object3d_3 = ObjectWp_3.lock();
 

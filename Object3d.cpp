@@ -18,11 +18,11 @@ ID3D12Device* Object3d::device = nullptr;
 ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
 ComPtr<ID3D12RootSignature> Object3d::rootsignature;
 ComPtr<ID3D12PipelineState> Object3d::pipelinestate;
-XMMATRIX Object3d::matView{};
-XMMATRIX Object3d::matProjection{};
-XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
-XMFLOAT3 Object3d::target = { 0, 0, 0 };
-XMFLOAT3 Object3d::up = { 0, 1, 0 };
+//XMMATRIX Object3d::matView{};
+//XMMATRIX Object3d::matProjection{};
+//XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
+//XMFLOAT3 Object3d::target = { 0, 0, 0 };
+//XMFLOAT3 Object3d::up = { 0, 1, 0 };
 
 bool Object3d::StaticInitialize(ID3D12Device * device, ID3D12GraphicsCommandList* cmdList,  int window_width, int window_height)
 {
@@ -35,7 +35,7 @@ bool Object3d::StaticInitialize(ID3D12Device * device, ID3D12GraphicsCommandList
 	Model::SetDevice(device);
 
 	// カメラ初期化
-	InitializeCamera(window_width, window_height);
+	Camera::InitializeCamera(window_width, window_height);
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -71,7 +71,7 @@ void Object3d::PostDraw()
 	//Object3d::cmdList = nullptr;
 }
 
-std::shared_ptr<Object3d> Object3d::Create(Model* model)
+std::shared_ptr<Object3d> Object3d::Create(Model* model, Camera* camera)
 {
 	// 3Dオブジェクトのインスタンスを生成
 	Object3d* object3d = new Object3d();
@@ -87,6 +87,7 @@ std::shared_ptr<Object3d> Object3d::Create(Model* model)
 	}
 
 	object3d->SetModel(model);
+	object3d->SetCamera(camera);
 
 	//スケールをリセット
 	/*float scale_val = 20;
@@ -96,58 +97,58 @@ std::shared_ptr<Object3d> Object3d::Create(Model* model)
 	return std::shared_ptr<Object3d>(object3d);
 }
 
-void Object3d::SetEye(XMFLOAT3 eye)
-{
-	Object3d::eye = eye;
+//void Object3d::SetEye(XMFLOAT3 eye)
+//{
+//	Object3d::eye = eye;
+//
+//	UpdateViewMatrix();
+//}
 
-	UpdateViewMatrix();
-}
+//void Object3d::SetTarget(XMFLOAT3 target)
+//{
+//	Object3d::target = target;
+//
+//	UpdateViewMatrix();
+//}
 
-void Object3d::SetTarget(XMFLOAT3 target)
-{
-	Object3d::target = target;
-
-	UpdateViewMatrix();
-}
-
-void Object3d::CameraMoveVector(XMFLOAT3 move)
-{
-	XMFLOAT3 eye_moved = GetEye();
-	XMFLOAT3 target_moved = GetTarget();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	target_moved.x += move.x;
-	target_moved.y += move.y;
-	target_moved.z += move.z;
-
-	SetEye(eye_moved);
-	SetTarget(target_moved);
-}
+//void Object3d::CameraMoveVector(XMFLOAT3 move)
+//{
+//	XMFLOAT3 eye_moved = GetEye();
+//	XMFLOAT3 target_moved = GetTarget();
+//
+//	eye_moved.x += move.x;
+//	eye_moved.y += move.y;
+//	eye_moved.z += move.z;
+//
+//	target_moved.x += move.x;
+//	target_moved.y += move.y;
+//	target_moved.z += move.z;
+//
+//	SetEye(eye_moved);
+//	SetTarget(target_moved);
+//}
 
 
-void Object3d::InitializeCamera(int window_width, int window_height)
-{
-	// ビュー行列の生成
-	matView = XMMatrixLookAtLH(
-		XMLoadFloat3(&eye),
-		XMLoadFloat3(&target),
-		XMLoadFloat3(&up));
-
-	// 平行投影による射影行列の生成
-	//constMap->mat = XMMatrixOrthographicOffCenterLH(
-	//	0, window_width,
-	//	window_height, 0,
-	//	0, 1);
-	// 透視投影による射影行列の生成
-	matProjection = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(60.0f),
-		(float)window_width / window_height,
-		0.1f, 1000.0f
-	);
-}
+//void Object3d::InitializeCamera(int window_width, int window_height)
+//{
+//	// ビュー行列の生成
+//	matView = XMMatrixLookAtLH(
+//		XMLoadFloat3(&eye),
+//		XMLoadFloat3(&target),
+//		XMLoadFloat3(&up));
+//
+//	// 平行投影による射影行列の生成
+//	//constMap->mat = XMMatrixOrthographicOffCenterLH(
+//	//	0, window_width,
+//	//	window_height, 0,
+//	//	0, 1);
+//	// 透視投影による射影行列の生成
+//	matProjection = XMMatrixPerspectiveFovLH(
+//		XMConvertToRadians(60.0f),
+//		(float)window_width / window_height,
+//		0.1f, 1000.0f
+//	);
+//}
 
 bool Object3d::InitializeGraphicsPipeline()
 {
@@ -307,11 +308,11 @@ void Object3d::CreateModel()
 	/*std::vector<VertexPosNormalUv> realVertices;*/	
 }
 
-void Object3d::UpdateViewMatrix()
-{
-	// ビュー行列の更新
-	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
-}
+//void Object3d::UpdateViewMatrix()
+//{
+//	// ビュー行列の更新
+//	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+//}
 
 bool Object3d::Initialize()
 {
@@ -356,11 +357,14 @@ void Object3d::Update()
 		matWorld_ *= parent_->matWorld_;
 	}
 
+	const XMMATRIX& matViewProjection = camera_->GetmatViewProjection();
+
 	// 定数バッファへデータ転送B0
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0_->Map(0, nullptr, (void**)&constMap);
 	//constMap->color = color;
-	constMap->mat = matWorld_ * matView * matProjection;	// 行列の合成
+	//constMap->mat = matWorld_ * matView * matProjection;	// 行列の合成
+	constMap->mat = matWorld_ * matViewProjection;	// 行列の合成
 	constBuffB0_->Unmap(0, nullptr);
 
 }
