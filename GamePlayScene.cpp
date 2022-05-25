@@ -4,6 +4,7 @@
 #include "Input.h"
 #include "DebugText.h"
 #include "FbxLoader.h"
+#include "Fbx3d.h"
 
 void GamePlayScene::Initialize()
 {
@@ -48,6 +49,11 @@ void GamePlayScene::Initialize()
 	
 		//モデルを指定してFBXファイルを読み込み
 		FbxLoader::GetInstance()->LoadModelFromFile("cube");
+
+		//デバイスをセット
+		Fbx3d::SetDevice(dxCommon->GetDev());
+		//カメラセット
+		Fbx3d::SetCamera(camera);
 
 	//音声読み込みと再生
 	Audio::GetInstance()->LoadWave("Alarm01.wav");

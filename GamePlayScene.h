@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BaseScene.h"
+#include "DirectXCommon.h"
 #include "Sprite.h"
 #include "Object3d.h"
 #include "Input.h"
@@ -28,6 +29,7 @@ public:
 
 	
 private:
+	DirectXCommon* dxCommon = nullptr;
 	Sprite* sprite = nullptr;
 	Model* model_1 = nullptr;
 	Model* model_2 = nullptr;

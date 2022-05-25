@@ -156,6 +156,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
+    <ClCompile Include="Fbx3d.cpp" />
     <ClCompile Include="FbxLoader.cpp" />
     <ClCompile Include="FbxModel.cpp" />
     <ClCompile Include="FrameWork.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DirectXCommon.h" />
+    <ClInclude Include="Fbx3d.h" />
     <ClInclude Include="FbxLoader.h" />
     <ClInclude Include="FbxModel.h" />
     <ClInclude Include="FrameWork.h" />
