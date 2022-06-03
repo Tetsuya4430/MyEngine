@@ -42,7 +42,7 @@ void FbxLoader::Finalize()
     fbxManager->Destroy();
 }
 
-void FbxLoader::LoadModelFromFile(const string& modelName)
+FbxModel* FbxLoader::LoadModelFromFile(const string& modelName)
 {
     //モデルと同じ名前のフォルダから読み込む
     const string directoryPath = baseDirectory + modelName + "/";
@@ -83,6 +83,8 @@ void FbxLoader::LoadModelFromFile(const string& modelName)
 
     //FBXシーン解放
     fbxScene->Destroy();
+
+    return model;
 }
 
 void FbxLoader::ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode, Node* parent)
@@ -122,6 +124,8 @@ void FbxLoader::ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode, Node* pare
     node.transForm *= matScaling;   //ワールド行列にスケーリングを反映
     node.transForm *= matRotation;  //ワールド行列に回転を反映
     node.transForm *= matTranslation;   //ワールド行列に平行移動を反映
+
+    node.globalTransform = node.transForm;
 
     //グローバル変形行列の計算
     if (parent)
@@ -322,6 +326,8 @@ void FbxLoader::ParseMaterial(FbxModel* model, FbxNode* fbxNode)
 
                     //テクスチャ読み込み
                     LoadTexture(model, baseDirectory + model->name + "/" + name);
+
+                    textureLoaded = true;
                 }
             }
         }

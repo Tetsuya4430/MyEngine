@@ -58,6 +58,8 @@ public:	//メンバ関数
 	//ビュー射影行列の取得
 	static const XMMATRIX& GetmatViewProjection() { return matViewProjection; }
 
+	static void Update();
+
 
 private:	//メンバ変数
 		// ビュー行列

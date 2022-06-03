@@ -12,6 +12,9 @@ using namespace Microsoft::WRL;
 class DirectXCommon
 {
 public:	//メンバ関数
+	//インスタンス
+	static DirectXCommon* GetInstance();
+
 	//初期化
 	void Initialize(WinApp* winApp);
 	//描画前処理
@@ -42,6 +45,10 @@ private:	//メンバ変数
 	//WindowsAPI
 	WinApp* winApp = nullptr;
 	
+
+	DirectXCommon() = default;
+
+	~DirectXCommon() = default;
 
 private:
 	//デバイス

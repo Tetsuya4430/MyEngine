@@ -4,6 +4,13 @@
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
 
+DirectXCommon* DirectXCommon::GetInstance()
+{
+	static DirectXCommon instance;
+
+	return &instance;
+}
+
 void DirectXCommon::Initialize(WinApp* winApp)
 {
 	//NULL検出	
@@ -309,7 +316,7 @@ void DirectXCommon::PostDraw()
 #pragma region リソースバリア書き込み禁止
 //表示状態から描画状態に変更
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(),
-		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
 
 #pragma endregion
 

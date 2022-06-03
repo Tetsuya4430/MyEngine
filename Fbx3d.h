@@ -1,5 +1,5 @@
 #pragma once
-#include "Model.h"
+#include "FbxModel.h"
 #include "Camera.h"
 
 #include <Windows.h>
@@ -8,6 +8,7 @@
 #include <d3dx12.h>
 #include <DirectXMath.h>
 #include <string>
+#include "DirectXCommon.h"
 
 
 class Fbx3d
@@ -36,17 +37,46 @@ public:	//静的メンバ関数
 	static void SetDevice(ID3D12Device* device) { Fbx3d::device = device; }
 	static void SetCamera(Camera* camera) { Fbx3d::camera = camera; }
 
+	//グラフィックスパイプラインの生成
+	static void CreateGraphicsPipeline();
+
 private://静的メンバ変数
 	//デバイス
 	static ID3D12Device* device;
 	//カメラ
 	static Camera* camera;
 
+	//ルートシグネチャ
+	static ComPtr<ID3D12RootSignature> rootsignature;
+
+	//パイプラインステートオブジェクト
+	static ComPtr<ID3D12PipelineState> pipelinestate;
+
 public:	//メンバ関数
 	//初期化
 	void Initialize();
 
+	//毎フレーム処理
+	void Update();
+
+	//モデルのセット
+	void SetModel(FbxModel* fbxmodel) { this->fbxmodel = fbxmodel; }
+
+	//描画
+	void Draw(ID3D12GraphicsCommandList* cmdList);
+
 protected://メンバ変数
 	ComPtr<ID3D12Resource> constBuffTransform;
+
+	//ローカルスケール
+	XMFLOAT3 scale = { 1, 1, 1 };
+	//X,Y,Z軸回りのローカル回転角
+	XMFLOAT3 rotation = { 0, 0, 0 };
+	//ローカル座標
+	XMFLOAT3 position = { 0, 0, 0 };
+	//ローカルワールド変換行列
+	XMMATRIX matWorld;
+	//モデル
+	FbxModel* fbxmodel = nullptr;
 };
 

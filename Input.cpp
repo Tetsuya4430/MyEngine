@@ -51,7 +51,7 @@ void Input::Update()
 	result = devkeyboard->GetDeviceState(sizeof(key), key);
 }
 
-bool Input::PushKey(const BYTE& KeyNumber)
+bool Input::PushKey(BYTE KeyNumber)
 {
 	//指定キーを押していればtrueを返す
 	if (key[KeyNumber])
@@ -62,7 +62,7 @@ bool Input::PushKey(const BYTE& KeyNumber)
 	return false;
 }
 
-bool Input::TriggerKey(const BYTE& KeyNumber)
+bool Input::TriggerKey(BYTE KeyNumber)
 {
 	//指定キーを押していればtrueを返す
 	if (key[KeyNumber])

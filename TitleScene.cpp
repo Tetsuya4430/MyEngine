@@ -4,7 +4,7 @@
 #include "Input.h"
 #include "DebugText.h"
 
-void TitleScene::Initialize()
+void TitleScene::Initialize(/*DirectXCommon* dxCommon*/)
 {
 	////スプライト共通テクスチャ読み込み
 	SpriteCommon::GetInstance()->SpriteCommonLoadTexture(1, L"Resources/Image/Title.png");

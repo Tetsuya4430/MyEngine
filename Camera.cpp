@@ -5,7 +5,7 @@ using namespace DirectX;
 XMMATRIX Camera::matView{};
 XMMATRIX Camera::matProjection{};
 XMMATRIX Camera::matViewProjection{};
-XMFLOAT3 Camera::eye = { 0, 0, -50.0f };
+XMFLOAT3 Camera::eye = {0, 0, -50.0f };
 XMFLOAT3 Camera::target = { 0, 0, 0 };
 XMFLOAT3 Camera::up = { 0, 1, 0 };
 
@@ -68,4 +68,10 @@ void Camera::UpdateViewMatrix()
 {
 	// ビュー行列の更新
 	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+}
+
+void Camera::Update()
+{
+	// ビュープロジェクションの合成
+	matViewProjection = matView * matProjection;
 }

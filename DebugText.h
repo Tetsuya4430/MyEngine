@@ -18,7 +18,7 @@ public:
 	static DebugText* GetInstance();
 
 	void Initialize(SpriteCommon* spriteCommon, UINT texnumber);
-	void Print(const std::string& text, float x, float y, float scale = 1.0f);
+	void Print(const std::string& text, const float& x, const float& y, const float& scale = 1.0f);
 	void DrawAll();
 
 	void Finalize();

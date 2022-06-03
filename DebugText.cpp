@@ -23,7 +23,7 @@ void DebugText::Initialize(SpriteCommon* spriteCommon, UINT texnumber)
 	}
 }
 
-void DebugText::Print(const std::string& text, float x, float y, float scale)
+void DebugText::Print(const std::string& text, const float& x, const float& y, const float& scale)
 {
 	//‘S‚Ä‚Ì•¶Žš‚É‚Â‚¢‚Ä
 	for (int i = 0; i < text.size(); i++)

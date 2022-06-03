@@ -29,12 +29,12 @@ void FrameWork::Initialize()
 	winApp->Initialize();
 
 	//DirectXの初期化
-	dxCommon = new DirectXCommon();
+	dxCommon = DirectXCommon::GetInstance();
 	dxCommon->Initialize(winApp);
 
 	//スプライト共通部分の初期化
 	spriteCommon = SpriteCommon::GetInstance();
-	spriteCommon->Initialize(dxCommon->GetDev(), dxCommon->GetCmdList(), winApp->window_width, winApp->window_height);
+ 	spriteCommon->Initialize(dxCommon->GetDev(), dxCommon->GetCmdList(), winApp->window_width, winApp->window_height);
 
 	//デバッグテキスト
 	debugText = DebugText::GetInstance();
@@ -78,7 +78,7 @@ void FrameWork::Finalize()
 
 
 	//DirectX解放
-	delete dxCommon;
+	//delete dxCommon;
 
 	//WindowsのAPIの終了処理
 	winApp->Finalie();

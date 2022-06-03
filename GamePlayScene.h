@@ -4,6 +4,7 @@
 #include "DirectXCommon.h"
 #include "Sprite.h"
 #include "Object3d.h"
+#include "Fbx3d.h"
 #include "Input.h"
 #include "ObjectManager.h"
 
@@ -15,8 +16,14 @@
 class GamePlayScene : public BaseScene
 {
 public:
+	// コンストクラタ
+	GamePlayScene();
+
+	// デストラクタ
+	~GamePlayScene();
+
 	//初期化
-	void Initialize() override;
+	void Initialize(/*DirectXCommon* dxCommon*/) override;
 
 	//終了処理
 	void Finalize() override;
@@ -27,12 +34,16 @@ public:
 	//描画
 	void Draw() override;
 
-	
+
 private:
-	DirectXCommon* dxCommon = nullptr;
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	Sprite* sprite = nullptr;
 	Model* model_1 = nullptr;
 	Model* model_2 = nullptr;
+
+	FbxModel* model1 = nullptr;
+	Fbx3d* object1 = nullptr;
+
 	Input* input = nullptr;
 
 	Camera* camera = nullptr;

@@ -33,7 +33,7 @@ void SceneManager::Update()
 		nextScene_ = nullptr;
 
 		//VƒV[ƒ“‚Ì‰Šú‰»
-		scene_->Initialize();
+		scene_->Initialize(/*dxCommon*/);
 
 	}
 

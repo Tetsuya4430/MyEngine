@@ -22,7 +22,7 @@ struct Node
 	//ローカル変換行列
 	DirectX::XMMATRIX transForm;
 	//グローバル変換行列
-	DirectX::XMMATRIX globalTransform;
+	DirectX::XMMATRIX globalTransform /*= DirectX::XMMatrixIdentity()*/;
 	//親ノード(ワールド行列を計算するときに使う)
 	Node* parent = nullptr;
 };

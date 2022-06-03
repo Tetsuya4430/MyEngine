@@ -35,6 +35,8 @@ private:
 	//次のシーン
 	BaseScene* nextScene_ = nullptr;
 
+	DirectXCommon* dxCommon = nullptr;
+
 	//シーンファクトリ
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 

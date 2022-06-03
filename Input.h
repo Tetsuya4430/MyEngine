@@ -21,9 +21,9 @@ public:	//メンバ関数
 	//更新
 	void Update();
 	//キーの押下をチェック
-	bool PushKey(const BYTE& KeyNumber);
+	bool PushKey(BYTE KeyNumber);
 	//キーのトリガーをチェック
-	bool TriggerKey(const BYTE& KeyNumber);
+	bool TriggerKey(BYTE KeyNumber);
 
 private:	//メンバ変数
 	//キーボードデバイス

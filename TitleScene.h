@@ -11,7 +11,7 @@ class TitleScene : public BaseScene
 {
 public:
 	//‰Šú‰»
-	void Initialize() override;
+	void Initialize(/*DirectXCommon* dxCommon*/) override;
 
 	//I—¹ˆ—
 	void Finalize() override;
@@ -24,6 +24,7 @@ public:
 
 
 private:
+	DirectXCommon* dxCommon = nullptr;
 	Sprite* sprite = nullptr;
 };
 

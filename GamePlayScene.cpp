@@ -5,9 +5,21 @@
 #include "DebugText.h"
 #include "FbxLoader.h"
 #include "Fbx3d.h"
+#include "FrameWork.h"
+
+
+GamePlayScene::GamePlayScene()
+{
+}
+
+GamePlayScene::~GamePlayScene()
+{
+	delete(object1);
+	delete(model1);
+}
 
 void GamePlayScene::Initialize()
-{
+{ 
 	////スプライト共通テクスチャ読み込み
 	SpriteCommon::GetInstance()->SpriteCommonLoadTexture(1, L"Resources/Image/GamePlay.png");
 
@@ -47,13 +59,26 @@ void GamePlayScene::Initialize()
 		object3d_3->SetScale({ 21.0f, 21.0f, 21.0f });
 	
 	
-		//モデルを指定してFBXファイルを読み込み
-		FbxLoader::GetInstance()->LoadModelFromFile("cube");
-
 		//デバイスをセット
 		Fbx3d::SetDevice(dxCommon->GetDev());
 		//カメラセット
 		Fbx3d::SetCamera(camera);
+		//グラフィックスパイプラインを生成
+		Fbx3d::CreateGraphicsPipeline();
+
+		//モデルを指定してFBXファイルを読み込み
+		//FbxLoader::GetInstance()->LoadModelFromFile("cube");
+		model1 = FbxLoader::GetInstance()->LoadModelFromFile("cube");
+
+		//3dオブジェクト生成とモデルのセット
+		object1 = new Fbx3d;
+		object1->Initialize();
+		object1->SetModel(model1);
+
+
+
+		//カメラ注視点をセット
+		camera->SetTarget({ 0, 20, 0 });
 
 	//音声読み込みと再生
 	Audio::GetInstance()->LoadWave("Alarm01.wav");
@@ -96,18 +121,40 @@ void GamePlayScene::Update()
 	{
 			DirectX::XMFLOAT3 pos = object3d_1->GetPosition();
 
-			pos.x += 1.0f;
+			//pos.x += 1.0f;
 
 			object3d_1->SetPosition(pos);
+
+			if (Input::GetInstance()->PushKey(DIK_DOWN))
+			{
+				camera->CameraMoveVector({ 0, 0, -1.0f });
+			}
+
+			if (Input::GetInstance()->PushKey(DIK_UP))
+			{
+				camera->CameraMoveVector({ 0, 0, +1.0f });
+			}
+
+			if (Input::GetInstance()->PushKey(DIK_LEFT))
+			{
+				camera->CameraMoveVector({ 0, +1.0f, 0 });
+			}
 	}
+
 
 	//3Dオブジェクトの更新
 	objectManager_1->Update();
 	objectManager_2->Update();
 	objectManager_3->Update();
+
+	//FBXオブジェクトの更新
+	object1->Update();
 	
 	//スプライトの更新
 	sprite->Update();
+
+	//カメラの更新
+	camera->Update();
 
 
 	//Escキーでウィンドウを閉じる
@@ -120,6 +167,9 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw()
 {
+	// コマンドリストの取得
+	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
+
 	////スプライトの共通コマンド
 	SpriteCommon::GetInstance()->PreDraw();
 
@@ -129,10 +179,13 @@ void GamePlayScene::Draw()
 	//3Dオブジェクトの描画前処理
 	Object3d::PreDraw();
 
-	//3Dオブジェクトの描画
+	////3Dオブジェクトの描画
 	objectManager_1->Draw();
 	objectManager_2->Draw();
 	objectManager_3->Draw();
+
+	//FBXオブジェクトの描画
+	object1->Draw(cmdList);
 
 	//3Dオブジェクトの描画後処理
 	Object3d::PostDraw();

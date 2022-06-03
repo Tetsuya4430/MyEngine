@@ -1,4 +1,5 @@
 #pragma once
+#include "DirectXCommon.h"
 
 /// <summary>
 /// ‘O•ûéŒ¾
@@ -14,7 +15,7 @@ public:
 	virtual ~BaseScene() = default;
 
 	//‰Šú‰»
-	virtual void Initialize() = 0;
+	virtual void Initialize(/*DirectXCommon* dxCommon*/) = 0;
 
 	//I—¹ˆ—
 	virtual void Finalize() = 0;
