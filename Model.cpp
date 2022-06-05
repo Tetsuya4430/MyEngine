@@ -235,7 +235,7 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 				index_stream >> indexNormal;
 
 				//頂点データの追加
-				VertexPosNormalUv vertex{};
+				VertexPosNormalUvSkin vertex{};
 				vertex.pos = positions[indexPosition - 1];
 				vertex.normal = normals[indexNormal - 1];
 				vertex.uv = texcoords[indexTexcoord - 1];
@@ -354,7 +354,7 @@ void Model::CreateBuffers()
 {
 	HRESULT result = S_FALSE;
 
-	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * vertices_.size());
+	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUvSkin) * vertices_.size());
 	UINT sizeIB = static_cast<UINT>(sizeof(unsigned short) * indices_.size());
 
 
@@ -385,7 +385,7 @@ void Model::CreateBuffers()
 	}
 
 	// 頂点バッファへのデータ転送
-	VertexPosNormalUv* vertMap = nullptr;
+	VertexPosNormalUvSkin* vertMap = nullptr;
 	result = vertBuff_->Map(0, nullptr, (void**)&vertMap);
 	if (SUCCEEDED(result)) {
 		std::copy(vertices_.begin(), vertices_.end(), vertMap);

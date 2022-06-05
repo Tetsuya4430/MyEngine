@@ -67,8 +67,7 @@ void GamePlayScene::Initialize()
 		Fbx3d::CreateGraphicsPipeline();
 
 		//モデルを指定してFBXファイルを読み込み
-		//FbxLoader::GetInstance()->LoadModelFromFile("cube");
-		model1 = FbxLoader::GetInstance()->LoadModelFromFile("cube");
+		model1 = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 		//3dオブジェクト生成とモデルのセット
 		object1 = new Fbx3d;

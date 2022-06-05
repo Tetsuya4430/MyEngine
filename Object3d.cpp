@@ -305,7 +305,7 @@ bool Object3d::InitializeGraphicsPipeline()
 
 void Object3d::CreateModel()
 {
-	/*std::vector<VertexPosNormalUv> realVertices;*/	
+	/*std::vector<VertexPosNormalUvSkin> realVertices;*/	
 }
 
 //void Object3d::UpdateViewMatrix()

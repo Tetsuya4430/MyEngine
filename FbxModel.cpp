@@ -1,12 +1,19 @@
 #include "FbxModel.h"
 
+
+FbxModel::~FbxModel()
+{
+	//FBXシーンの解放
+	fbxScene->Destroy();
+}
+
 //頂点データをGPUメモリ上に配置する為の頂点バッファを生成
 void FbxModel::CreateBuffers(ID3D12Device* device)
 {
 	HRESULT result;
 
 	//頂点データ全体のサイズ
-	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * vertices.size());
+	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUvSkin) * vertices.size());
 
 	//頂点バッファ生成
 	result = device->CreateCommittedResource(
@@ -19,7 +26,7 @@ void FbxModel::CreateBuffers(ID3D12Device* device)
 	);
 
 	//頂点バッファへのデータ転送
-	VertexPosNormalUv* vertMap = nullptr;
+	VertexPosNormalUvSkin* vertMap = nullptr;
 
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 

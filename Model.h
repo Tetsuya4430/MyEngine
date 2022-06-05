@@ -14,7 +14,7 @@ class Model
 {
 public:
 	// 頂点データ構造体
-	struct VertexPosNormalUv
+	struct VertexPosNormalUvSkin
 	{
 		DirectX::XMFLOAT3 pos; // xyz座標
 		DirectX::XMFLOAT3 normal; // 法線ベクトル
@@ -84,7 +84,7 @@ private:
 	static ID3D12Device* device;
 
 	// 頂点データ配列
-	std::vector<VertexPosNormalUv> vertices_;
+	std::vector<VertexPosNormalUvSkin> vertices_;
 	// 頂点インデックス配列
 	std::vector<unsigned short> indices_;
 	//マテリアル
