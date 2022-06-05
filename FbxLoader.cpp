@@ -173,7 +173,7 @@ void FbxLoader::ParseMesh(FbxModel* model, FbxNode* fbxNode)
     ParseSkin(model, fbxMesh);
 }
 
-void FbxLoader::ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxMatrix& src)
+void FbxLoader::ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, const FbxAMatrix& src)
 {
     //行
     for (int i = 0; i < 4; i++)

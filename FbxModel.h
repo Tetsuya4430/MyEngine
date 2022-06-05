@@ -34,6 +34,23 @@ public:
 	//フレンドクラス
 	friend class FbxLoader;
 
+	//クラス内構造体
+	//ボーン構造体
+	struct Bone
+	{
+		//名前
+		std::string name;
+		//初期姿勢の逆行列
+		DirectX::XMMATRIX invInitialPose;
+		//クラスター(FBX側のボーン情報)
+		FbxCluster* fbxCluster;
+		//コンストラクタ
+		Bone(const std::string& name)
+		{
+			this->name = name;
+		}
+	};
+
 private:
 	//エイリアス
 	//Microsoft::WRL::を省略
@@ -51,22 +68,7 @@ private:
 	using string = std::string;
 	template <class T> using vector = std::vector<T>;
 
-//クラス内構造体
-	//ボーン構造体
-	struct Bone
-	{
-		//名前
-		std::string name;
-		//初期姿勢の逆行列
-		DirectX::XMMATRIX invInitialPose;
-		//クラスター(FBX側のボーン情報)
-		FbxCluster* fbxCluster;
-		//コンストラクタ
-		Bone(const std::string& name)
-		{
-			this->name = name;
-		}
-	};
+
 
 public:	//定数
 //ボーンインデックスの最大数

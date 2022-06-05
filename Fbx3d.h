@@ -23,6 +23,10 @@ protected:	//エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
+public:	//定数
+	//ボーン最大数
+	static const int MAX_BONES = 32;
+
 public:	//サブクラス
 	//定数バッファ用データ構造体(座標変換行列)
 	struct ConstBufferDataTransform
@@ -30,6 +34,12 @@ public:	//サブクラス
 		XMMATRIX viewproj;	//ビュープロジェクション行列
 		XMMATRIX world;		//ワールド行列
 		XMFLOAT3 cameraPos;	//カメラ座標(ワールド座標)
+	};
+
+	//定数バッファ用構造体(スキニング)
+	struct ConstBufferDataSkin
+	{
+		XMMATRIX bones[MAX_BONES];
 	};
 
 public:	//静的メンバ関数
@@ -67,6 +77,7 @@ public:	//メンバ関数
 
 protected://メンバ変数
 	ComPtr<ID3D12Resource> constBuffTransform;
+	ComPtr<ID3D12Resource> constBuffSkin;
 
 	//ローカルスケール
 	XMFLOAT3 scale = { 1, 1, 1 };
