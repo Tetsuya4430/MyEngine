@@ -78,12 +78,12 @@ FbxModel* FbxLoader::LoadModelFromFile(const string& modelName)
     //ルートノードから順に解析してモデルを流し込む
     ParseNodeRecursive(model, fbxScene->GetRootNode());
 
-    //バッファ生成
-    model->CreateBuffers(device);
-
     //FBXシーン解放
     //fbxScene->Destroy();
     model->fbxScene = fbxScene;
+
+    //バッファ生成
+    model->CreateBuffers(device);
 
     return model;
 }

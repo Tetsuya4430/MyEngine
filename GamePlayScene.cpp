@@ -148,6 +148,7 @@ void GamePlayScene::Update()
 
 	//FBXオブジェクトの更新
 	object1->Update();
+	object1->PlayAnimation();
 	
 	//スプライトの更新
 	sprite->Update();
