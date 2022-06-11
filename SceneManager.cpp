@@ -4,9 +4,9 @@
 
 SceneManager::~SceneManager()
 {
-	//最後のシーンの終了と解放
-	scene_->Finalize();
-	delete scene_;
+	////最後のシーンの終了と解放
+	//scene_->Finalize();
+	//delete scene_;
 }
 
 SceneManager* SceneManager::GetInstance()
@@ -52,4 +52,11 @@ void SceneManager::ChangeScene(const std::string& sceneName)
 
 	//次シーンを生成
 	nextScene_ = sceneFactory_->CreateScene(sceneName);
+}
+
+void SceneManager::Finalize()
+{
+	//最後のシーンの終了と解放
+	scene_->Finalize();
+	delete scene_;
 }

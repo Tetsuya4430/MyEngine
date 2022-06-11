@@ -70,6 +70,9 @@ void FrameWork::Finalize()
 	//デバッグテキスト解放
 	//debugText->Finalize();
 	
+	//シーンマネージャーの解放
+	SceneManager::GetInstance()->Finalize();
+
 	//FBXローダーの解放
 	FbxLoader::GetInstance()->Finalize();
 

@@ -29,6 +29,9 @@ public:
 
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
 
+	//‰ğ•ú
+	void Finalize();
+
 private:
 	//¡‚ÌƒV[ƒ“
 	BaseScene* scene_ = nullptr;
