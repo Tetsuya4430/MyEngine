@@ -82,6 +82,9 @@ void GamePlayScene::Initialize()
 	//音声読み込みと再生
 	Audio::GetInstance()->LoadWave("Alarm01.wav");
 	/*Audio::GetInstance()->PlayWave("Alarm01.wav");*/
+
+
+	object1->PlayAnimation();
 }
 
 void GamePlayScene::Finalize()
@@ -148,7 +151,6 @@ void GamePlayScene::Update()
 
 	//FBXオブジェクトの更新
 	object1->Update();
-	object1->PlayAnimation();
 	
 	//スプライトの更新
 	sprite->Update();

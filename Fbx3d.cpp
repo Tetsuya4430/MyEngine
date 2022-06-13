@@ -83,19 +83,6 @@ void Fbx3d::Update()
 		constBuffTransform->Unmap(0, nullptr);
 	}
 
-	//アニメーション
-	if (isPlay)
-	{
-		//1フレーム進める
-		currentTime += frameTime;
-
-		//最後まで再生したら先頭まで戻す
-		if (currentTime > endTime)
-		{
-			currentTime = startTime;
-		}
-	}
-
 
 	//ボーン配列
 	std::vector<FbxModel::Bone>& bones = fbxmodel->GetBones();
@@ -116,6 +103,19 @@ void Fbx3d::Update()
 		constMapSkin->bones[i] = bones[i].invInitialPose * matCurrentPose;
 	}
 	constBuffSkin->Unmap(0, nullptr);
+
+	//アニメーション
+	if (isPlay)
+	{
+		//1フレーム進める
+		currentTime += frameTime;
+
+		//最後まで再生したら先頭まで戻す
+		if (currentTime > endTime)
+		{
+			currentTime = startTime;
+		}
+	}
 }
 
 void Fbx3d::Draw(ID3D12GraphicsCommandList* cmdList)
