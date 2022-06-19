@@ -1,4 +1,4 @@
-#include "GamePlayScene.h"
+#include "GameScene.h"
 #include "SceneManager.h"
 #include "Audio.h"
 #include "Input.h"
@@ -8,17 +8,17 @@
 #include "FrameWork.h"
 
 
-GamePlayScene::GamePlayScene()
+GameScene::GameScene()
 {
 }
 
-GamePlayScene::~GamePlayScene()
+GameScene::~GameScene()
 {
 	delete(object1);
 	delete(model1);
 }
 
-void GamePlayScene::Initialize()
+void GameScene::Initialize()
 { 
 	////スプライト共通テクスチャ読み込み
 	SpriteCommon::GetInstance()->SpriteCommonLoadTexture(1, L"Resources/Image/GamePlay.png");
@@ -87,7 +87,7 @@ void GamePlayScene::Initialize()
 	object1->PlayAnimation();
 }
 
-void GamePlayScene::Finalize()
+void GameScene::Finalize()
 {
 	//スプライト解放
 	delete sprite;
@@ -97,7 +97,7 @@ void GamePlayScene::Finalize()
 	delete model_2;
 }
 
-void GamePlayScene::Update()
+void GameScene::Update()
 {
 	//---デバッグテキスト関係---//
 	//X座標、Y座標を指定して表示
@@ -172,7 +172,7 @@ void GamePlayScene::Update()
 	}
 }
 
-void GamePlayScene::Draw()
+void GameScene::Draw()
 {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();

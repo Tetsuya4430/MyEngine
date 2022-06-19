@@ -13,14 +13,14 @@
 /// <summary>
 /// ゲームプレイシーン
 /// </summary>
-class GamePlayScene : public BaseScene
+class GameScene : public BaseScene
 {
 public:
 	// コンストクラタ
-	GamePlayScene();
+	GameScene();
 
 	// デストラクタ
-	~GamePlayScene();
+	~GameScene();
 
 	//初期化
 	void Initialize(/*DirectXCommon* dxCommon*/) override;
@@ -54,5 +54,7 @@ private:
 	std::unique_ptr<ObjectManager> objectManager_1;
 	std::unique_ptr<ObjectManager> objectManager_2;
 	std::unique_ptr<ObjectManager> objectManager_3;
+
+	float MoveVec = 1.0f;
 };
 

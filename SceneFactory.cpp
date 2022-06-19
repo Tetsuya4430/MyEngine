@@ -1,5 +1,5 @@
 #include "SceneFactory.h"
-#include "GamePlayScene.h"
+#include "GameScene.h"
 #include "TitleScene.h"
 
 BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
@@ -14,7 +14,7 @@ BaseScene* SceneFactory::CreateScene(const std::string& sceneName)
 
     else if (sceneName == "GAMEPLAY")
     {
-        newScene = new GamePlayScene();
+        newScene = new GameScene();
     }
 
     return newScene;
