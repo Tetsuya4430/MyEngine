@@ -129,17 +129,22 @@ void GamePlayScene::Update()
 
 			if (Input::GetInstance()->PushKey(DIK_DOWN))
 			{
-				camera->CameraMoveVector({ 0, 0, -1.0f });
+				camera->CameraMoveVector({ 0, 0, -MoveVec });
 			}
 
 			if (Input::GetInstance()->PushKey(DIK_UP))
 			{
-				camera->CameraMoveVector({ 0, 0, +1.0f });
+				camera->CameraMoveVector({ 0, 0, +MoveVec });
 			}
 
 			if (Input::GetInstance()->PushKey(DIK_LEFT))
 			{
-				camera->CameraMoveVector({ 0, +1.0f, 0 });
+				camera->CameraMoveVector({ 0, +MoveVec, 0 });
+			}
+
+			if (Input::GetInstance()->PushKey(DIK_RIGHT))
+			{
+				camera->CameraMoveVector({ 0, -MoveVec, 0 });
 			}
 	}
 
