@@ -3,11 +3,21 @@
 #include <d3dx12.h>
 
 using namespace DirectX;
+using namespace Microsoft::WRL;
+
+
+Sprite::Sprite(UINT texNumber, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY)
+{
+	this->texNumber_ = texNumber;
+	this->anchorpoint_ = anchorpoint;
+	this->isFlipX_ = isFlipX;
+	this->isFlipY_ = isFlipY;
+}
 
 Sprite* Sprite::Create( UINT texNumber, DirectX::XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY)
 {
 	//メモリ確保
-	Sprite* instance = new Sprite();
+	Sprite* instance = new Sprite(texNumber, anchorpoint, isFlipX, isFlipY);
 	//インスタンス初期化
 	instance->Initialize( texNumber, anchorpoint, isFlipX, isFlipY);
 

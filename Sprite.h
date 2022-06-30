@@ -11,8 +11,17 @@
 /// </summary>
 class Sprite
 {
-public:
+private: // エイリアス
+// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
 
+
+public:
 	//スプライト用構造体
 	struct VertexPosUv
 	{
@@ -26,6 +35,9 @@ public:
 		DirectX::XMFLOAT4 color;	//色(R,G,B,A)
 		DirectX::XMMATRIX mat;	//3D変換行列
 	};
+
+public:
+	Sprite(UINT texNumber, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY);
 
 	/// <summary>
 	/// スプライト生成
@@ -64,7 +76,7 @@ public:
 	void SetTexLeftTop(const DirectX::XMFLOAT2& texLeftTop) { texLeftTop_ = texLeftTop; }
 	void SetTexSize(const DirectX::XMFLOAT2& texSize) { texSize_ = texSize; }
 
-private:
+	protected:
 	//頂点バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
 

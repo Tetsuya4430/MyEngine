@@ -7,7 +7,6 @@
 #include "Fbx3d.h"
 #include "FrameWork.h"
 
-
 GameScene::GameScene()
 {
 }
@@ -22,9 +21,17 @@ void GameScene::Initialize()
 { 
 	////スプライト共通テクスチャ読み込み
 	SpriteCommon::GetInstance()->SpriteCommonLoadTexture(1, L"Resources/Image/GamePlay.png");
+	SpriteCommon::GetInstance()->SpriteCommonLoadTexture(100, L"Resources/Image/Sana.png");
 
 	//	スプライトの生成
 	sprite = Sprite::Create(1, { 0, 0 }, false, false);
+
+	//post = Post::Create(100, { 0, 0 }, false, false);
+
+	//ポストエフェクトの初期化
+	//postEffect = new PostEffect();
+	//postEffect->Initialize(100, { 0, 0 }, false, false);
+	postEffect = PostEffect::Create(100, { 0, 0 }, false, false);
 
 	//OBJからモデルデータを読み込む
 	model_1 = Model::LoadFromObj("triangle_mat");
@@ -160,6 +167,8 @@ void GameScene::Update()
 	//スプライトの更新
 	sprite->Update();
 
+	//post->Update();
+
 	//カメラの更新
 	camera->Update();
 
@@ -182,6 +191,11 @@ void GameScene::Draw()
 
 	////スプライト描画
 	sprite->Draw();
+
+	//post->Draw();
+
+	//ポストエフェクト描画
+	postEffect->Draw();
 
 	//3Dオブジェクトの描画前処理
 	Object3d::PreDraw();

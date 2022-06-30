@@ -33,22 +33,24 @@ enum ButtonState
 	ButtonStateMax,
 };
 
-//コントローラの初期化処理
-bool InitInput();
+class Controller
+{
+	//コントローラの初期化処理
+	bool InitInput();
 
-//コントローラの終了処理
-void ReleaseInput();
+	//コントローラの終了処理
+	void ReleaseInput();
 
-//コントローラーの更新処理
-void UpdateInput();
+	//コントローラーの更新処理
+	void UpdateInput();
 
-//ボタンが押されているかの判定
-bool IsButtonPush(ButtonKind button);
+	//ボタンが押されているかの判定
+	bool IsButtonPush(ButtonKind button);
 
-//ボタンの離した瞬間を判定
-bool IsButtonUp(ButtonKind button);
+	//ボタンの離した瞬間を判定
+	bool IsButtonUp(ButtonKind button);
 
-//ボタンの押した瞬間の判定
-bool IsButtonDown(ButtonKind button);
-
+	//ボタンの押した瞬間の判定
+	bool IsButtonDown(ButtonKind button);
+};
 #endif
