@@ -31,5 +31,7 @@ private:
 	FbxModel* model1 = nullptr;
 	Fbx3d* object1 = nullptr;
 	Camera* camera = nullptr;
+
+	float MoveVec = 0.1f;
 };
 

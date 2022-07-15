@@ -30,6 +30,8 @@ void TitleScene::Initialize(/*DirectXCommon* dxCommon*/)
 	object1->Initialize();
 	object1->SetModel(model1);
 
+	object1->SetPosition({ 75, 0, 0 });
+
 	object1->PlayAnimation();
 
 	//カメラ注視点をセット
@@ -50,6 +52,32 @@ void TitleScene::Update()
 	{
 		//シーン切り替え
 		SceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+	}
+
+	//座標操作
+	if (Input::GetInstance()->PushKey(DIK_UP) || Input::GetInstance()->PushKey(DIK_DOWN) || Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT))
+	{
+		
+
+		if (Input::GetInstance()->PushKey(DIK_DOWN))
+		{
+			camera->CameraMoveVector({ -MoveVec, 0, 0 });
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_UP))
+		{
+			camera->CameraMoveVector({ +MoveVec, 0, 0 });
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_LEFT))
+		{
+			camera->CameraMoveVector({ 0, +MoveVec, 0 });
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_RIGHT))
+		{
+			camera->CameraMoveVector({ 0, -MoveVec, 0 });
+		}
 	}
 	
 	//スプライトの更新
