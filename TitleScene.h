@@ -3,6 +3,7 @@
 #include "BaseScene.h"
 #include "Sprite.h"
 #include "Object3d.h"
+#include "Fbx3d.h"
 
 /// <summary>
 /// タイトルシーン
@@ -24,7 +25,11 @@ public:
 
 
 private:
-	DirectXCommon* dxCommon = nullptr;
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	Sprite* sprite = nullptr;
+
+	FbxModel* model1 = nullptr;
+	Fbx3d* object1 = nullptr;
+	Camera* camera = nullptr;
 };
 

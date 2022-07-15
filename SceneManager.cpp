@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "PostEffect.h"
 
 #include <cassert>
 

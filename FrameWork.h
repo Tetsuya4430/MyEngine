@@ -5,10 +5,12 @@
 #include "Object3d.h"
 #include "FbxLoader.h"
 #include "Sprite.h"
-#include "DebugText.h"
+//#include "DebugText.h"
+#include "SpriteCommon.h"
 #include "Audio.h"
 #include "SceneManager.h"
 #include "AbstractSceneFactory.h"
+#include "PostEffect.h"
 
 
 /// <summary>
@@ -50,10 +52,12 @@ protected:
 
 	WinApp* winApp = nullptr;
 	Input* input = nullptr;
-	DirectXCommon* dxCommon = nullptr;
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	Audio* audio = nullptr;
-	DebugText* debugText = nullptr;
+	Sprite* sprite = nullptr;
+	//DebugText* debugText = nullptr;
 	SpriteCommon* spriteCommon = nullptr;
 	AbstractSceneFactory* sceneFactory_ = nullptr;
+	PostEffect* postEffect = nullptr;
 };
 

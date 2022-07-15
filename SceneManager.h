@@ -2,6 +2,7 @@
 
 #include "BaseScene.h"
 #include "AbstractSceneFactory.h"
+#include "PostEffect.h"
 
 /// <summary>
 /// シーン管理
@@ -38,7 +39,9 @@ private:
 	//次のシーン
 	BaseScene* nextScene_ = nullptr;
 
-	DirectXCommon* dxCommon = nullptr;
+	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+	PostEffect* postEffect = nullptr;
 
 	//シーンファクトリ
 	AbstractSceneFactory* sceneFactory_ = nullptr;

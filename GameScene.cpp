@@ -2,10 +2,11 @@
 #include "SceneManager.h"
 #include "Audio.h"
 #include "Input.h"
-#include "DebugText.h"
+//#include "DebugText.h"
 #include "FbxLoader.h"
 #include "Fbx3d.h"
 #include "FrameWork.h"
+#include "PostEffect.h"
 
 GameScene::GameScene()
 {
@@ -15,23 +16,29 @@ GameScene::~GameScene()
 {
 	delete(object1);
 	delete(model1);
+	//delete(postEffect);
 }
 
 void GameScene::Initialize()
 { 
 	////スプライト共通テクスチャ読み込み
-	SpriteCommon::GetInstance()->SpriteCommonLoadTexture(1, L"Resources/Image/GamePlay.png");
-	SpriteCommon::GetInstance()->SpriteCommonLoadTexture(100, L"Resources/Image/Sana.png");
+	//SpriteCommon::GetInstance()->SpriteCommonLoadTexture(1, L"Resources/Image/GamePlay.png");
+	//SpriteCommon::GetInstance()->SpriteCommonLoadTexture(100, L"Resources/Image/Rena.jpg");
+
+
+	Sprite::LoadTexture(1, L"Resources/Image/GamePlay.png");
+	//Sprite::LoadTexture(100, L"Resources/Image/background.png");
 
 	//	スプライトの生成
-	sprite = Sprite::Create(1, { 0, 0 }, false, false);
-
-	//post = Post::Create(100, { 0, 0 }, false, false);
+	title = Sprite::Create(1, { 0, 0 });
 
 	//ポストエフェクトの初期化
-	//postEffect = new PostEffect();
-	//postEffect->Initialize(100, { 0, 0 }, false, false);
-	postEffect = PostEffect::Create(100, { 0, 0 }, false, false);
+	postEffect = new PostEffect();
+	postEffect->Initialize();
+
+
+	//ポストエフェクトの生成
+	postEffect = PostEffect::Create(1, { 0, 0 });
 
 	//OBJからモデルデータを読み込む
 	model_1 = Model::LoadFromObj("triangle_mat");
@@ -106,12 +113,12 @@ void GameScene::Finalize()
 
 void GameScene::Update()
 {
-	//---デバッグテキスト関係---//
-	//X座標、Y座標を指定して表示
-	DebugText::GetInstance()->Print("Debug Text", 0, 0);
+	////---デバッグテキスト関係---//
+	////X座標、Y座標を指定して表示
+	//DebugText::GetInstance()->Print("Debug Text", 0, 0);
 
-	//X座標、Y座標、縮尺を指定して表示
-	DebugText::GetInstance()->Print("Debug Text = 0", 0, 50, 2.0f);
+	////X座標、Y座標、縮尺を指定して表示
+	//DebugText::GetInstance()->Print("Debug Text = 0", 0, 50, 2.0f);
 
 
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN))
@@ -136,12 +143,12 @@ void GameScene::Update()
 
 			if (Input::GetInstance()->PushKey(DIK_DOWN))
 			{
-				camera->CameraMoveVector({ 0, 0, -MoveVec });
+				camera->CameraMoveVector({ -MoveVec, 0, 0 });
 			}
 
 			if (Input::GetInstance()->PushKey(DIK_UP))
 			{
-				camera->CameraMoveVector({ 0, 0, +MoveVec });
+				camera->CameraMoveVector({ +MoveVec, 0, 0 });
 			}
 
 			if (Input::GetInstance()->PushKey(DIK_LEFT))
@@ -165,9 +172,8 @@ void GameScene::Update()
 	object1->Update();
 	
 	//スプライトの更新
-	sprite->Update();
+	//sprite->Update();
 
-	//post->Update();
 
 	//カメラの更新
 	camera->Update();
@@ -179,6 +185,7 @@ void GameScene::Update()
 		//endRequest_ = true;
 		return;
 	}
+
 }
 
 void GameScene::Draw()
@@ -186,16 +193,10 @@ void GameScene::Draw()
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
 
-	////スプライトの共通コマンド
-	SpriteCommon::GetInstance()->PreDraw();
+	////レンダーターゲット
+	//postEffect->PreDrawScene(cmdList);
 
-	////スプライト描画
-	sprite->Draw();
-
-	//post->Draw();
-
-	//ポストエフェクト描画
-	postEffect->Draw();
+	//postEffect->PostDrawScene(cmdList);
 
 	//3Dオブジェクトの描画前処理
 	Object3d::PreDraw();
@@ -212,11 +213,17 @@ void GameScene::Draw()
 	Object3d::PostDraw();
 
 
-	////スプライトの共通コマンド
-	SpriteCommon::GetInstance()->PreDraw();
 
-	//////スプライト描画
-	//sprite->Draw();
+	Sprite::PreDraw(cmdList);
+
+	//ポストエフェクト描画
+	postEffect->Draw();
+
+	Sprite::PostDraw();
+
+
+
+
 }
 
 

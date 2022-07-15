@@ -275,7 +275,7 @@ void DirectXCommon::PreDraw()
 #pragma endregion
 
 	//3,画面クリア
-	float clearColor[] = { 0.0f, 0.25f, 0.25f, 0.0f };	//画面の初期カラー
+	float clearColor[] = { 0.0f, 0.25f, 0.5f, 0.0f };	//画面の初期カラー
 	cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
 	cmdList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 

@@ -8,7 +8,7 @@
 #include "Input.h"
 #include "ObjectManager.h"
 #include "PostEffect.h"
-#include "Post.h"
+//#include "PostEffect.h"
 
 
 
@@ -42,7 +42,8 @@ public:
 private:
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 	Sprite* sprite = nullptr;
-	Post* post = nullptr;
+	Sprite* title = nullptr;
+	Sprite* postEffect = nullptr;
 	Model* model_1 = nullptr;
 	Model* model_2 = nullptr;
 
@@ -52,7 +53,7 @@ private:
 	Input* input = nullptr;
 
 	Camera* camera = nullptr;
-	PostEffect* postEffect = nullptr;
+	//PostEffect* postEffect = nullptr;
 
 
 	std::shared_ptr<Object3d> object3d_1;

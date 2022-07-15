@@ -3,61 +3,69 @@
 class PostEffect :
     public Sprite
 {
-private: // エイリアス
-// Microsoft::WRL::を省略
+private:
+    // Microsoft::WRL::を省略
     template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-    // DirectX::を省略
-    using XMFLOAT2 = DirectX::XMFLOAT2;
-    using XMFLOAT3 = DirectX::XMFLOAT3;
-    using XMFLOAT4 = DirectX::XMFLOAT4;
-    using XMMATRIX = DirectX::XMMATRIX;
 public:
+
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    PostEffect(UINT texNumber, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY);
+    PostEffect();
 
     /// <summary>
     /// 初期化
     /// </summary>
-    /// <param name="texNumber"></param>
-    /// <param name="anchorpoint"></param>
-    /// <param name="isFlipX"></param>
-    /// <param name="isFlipY"></param>
-    void Initialize(UINT texNumber, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY);
+    void Initialize();
 
 
     /// <summary>
-    /// スプライト生成
+    /// 描画コマンドの発行
     /// </summary>
-    /// <param name="texNumber"></param>
-    /// <param name="anchorpoint"></param>
-    /// <param name="isFlipX"></param>
-    /// <param name="isFlipY"></param>
-    /// <returns></returns>
-    static PostEffect* Create(UINT texNumber, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY);
+    /// <param name="cmdList"></param>
+    void Draw(ID3D12GraphicsCommandList* cmdList);
 
-    /// <summary>
-    /// 描画
-    /// </summary>
-    void Draw();
 
-    public:
-    // ルートシグネチャ
-    static ComPtr<ID3D12RootSignature> rootSignature;
-    // パイプラインステートオブジェクト
-    static ComPtr<ID3D12PipelineState> pipelineState;
+        /// <summary>
+        /// シーン描画処理
+        /// </summary>
+        /// <param name="cmdList"></param>
+        void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
 
-    //テクスチャ番号
-    UINT texNumber_ = 0;
+        /// <summary>
+        /// シーン描画処理
+        /// </summary>
+        /// <param name="cmdList"></param>
+        void PostDrawScene(ID3D12GraphicsCommandList* cmdList);
 
-    //アンカーポイント
-    DirectX::XMFLOAT2 anchorpoint_ = { 0.5f, 0.5f };
+        /// <summary>
+        /// パイプライン生成
+        /// </summary>
+        void CreateGraphicsPipelineState();
 
-    //左右反転
-    bool isFlipX_ = false;
+public:
+    static const float clearColor[4];
 
-    //上下反転
-    bool isFlipY_ = false;
-};
+private:
+    //テクスチャバッファ
+    ComPtr<ID3D12Resource> texBuff;
+
+    //SRV用デスクリプタヒープ
+    ComPtr<ID3D12DescriptorHeap> descHeapSRV;
+
+    //深度バッファ
+    ComPtr<ID3D12Resource> depthBuff;
+
+    //RTV用デスクリプタヒープ
+    ComPtr<ID3D12DescriptorHeap> descHeapRTV;
+
+    //DSV用デスクリプタヒープ
+    ComPtr<ID3D12DescriptorHeap> descHeapDSV;
+
+    //グラフィクスパイプライン
+    ComPtr<ID3D12PipelineState> pipelineState;
+
+    //ルートシグネチャ
+    ComPtr<ID3D12RootSignature> rootSignature;
+}; 
 

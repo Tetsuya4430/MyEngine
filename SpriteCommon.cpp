@@ -60,6 +60,9 @@ void SpriteCommon::PreDraw()
 	ID3D12DescriptorHeap* ppHeaps[] = { descHeap_.Get() };
 	commandList_->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 
+
+
+
 }
 
 void SpriteCommon::SpriteCommonLoadTexture(UINT texnumber, const wchar_t* filename)

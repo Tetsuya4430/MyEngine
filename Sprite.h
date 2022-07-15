@@ -1,126 +1,208 @@
-#pragma once
+ï»¿#pragma once
 
-#include "SpriteCommon.h"
-
+#include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
 #include <DirectXMath.h>
+#include "SpriteCommon.h"
 
 /// <summary>
-/// ƒXƒvƒ‰ƒCƒg1–‡•ª‚ğ•\‚·ƒNƒ‰ƒX
+/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 /// </summary>
 class Sprite
 {
-private: // ƒGƒCƒŠƒAƒX
-// Microsoft::WRL::‚ğÈ—ª
+private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+	// Microsoft::WRL::ã‚’çœç•¥
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::‚ğÈ—ª
+	// DirectX::ã‚’çœç•¥
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-
-public:
-	//ƒXƒvƒ‰ƒCƒg—p\‘¢‘Ì
+public: // ã‚µãƒ–ã‚¯ãƒ©ã‚¹
+	/// <summary>
+	/// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
+	/// </summary>
 	struct VertexPosUv
 	{
-		DirectX::XMFLOAT3 pos;	//xyzÀ•W
-		DirectX::XMFLOAT2 uv;	//uvÀ•W
+		XMFLOAT3 pos; // xyzåº§æ¨™
+		XMFLOAT2 uv;  // uvåº§æ¨™
 	};
 
-	//’è”ƒoƒbƒtƒ@—pƒf[ƒ^\‘¢‘Ì
+	/// <summary>
+	/// å®šæ•°ãƒãƒƒãƒ•ã‚¡ç”¨ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
+	/// </summary>
 	struct ConstBufferData
 	{
-		DirectX::XMFLOAT4 color;	//F(R,G,B,A)
-		DirectX::XMMATRIX mat;	//3D•ÏŠ·s—ñ
+		XMFLOAT4 color;	// è‰² (RGBA)
+		XMMATRIX mat;	// ï¼“ï¼¤å¤‰æ›è¡Œåˆ—
 	};
 
-public:
-	Sprite(UINT texNumber, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY);
+public: // é™çš„ãƒ¡ãƒ³ãƒé–¢æ•°
 
 	/// <summary>
-	/// ƒXƒvƒ‰ƒCƒg¶¬
+	/// é™çš„åˆæœŸåŒ–
 	/// </summary>
-	/// <param name="spriteCommon">ƒXƒvƒ‰ƒCƒg‹¤’Ê</param>
-	/// <param name="texNumber">ƒeƒNƒXƒ`ƒƒ”Ô†</param>
-	/// <param name="anchorpoint">ƒAƒ“ƒJ[ƒ|ƒCƒ“ƒg</param>
-	/// <param name="isFlipX">X”½“]‚·‚é‚©</param>
-	/// <param name="isFlipY">Y”½“]‚·‚é‚©</param>
-	static Sprite* Create(UINT texNumber, DirectX::XMFLOAT2 anchorpoint = {0.5f, 0.5f}, bool isFlipX = false, bool isFlipY = false);
+	/// <param name="device">ãƒ‡ãƒã‚¤ã‚¹</param>
+	/// <param name="window_width">ç”»é¢å¹…</param>
+	/// <param name="window_height">ç”»é¢é«˜ã•</param>
+	/// <returns>æˆå¦</returns>
+	static bool StaticInitialize(ID3D12Device* device, int window_width, int window_height);
 
 	/// <summary>
-	/// ‰Šú‰»
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
 	/// </summary>
-	void Initialize(UINT texNumber, DirectX::XMFLOAT2 anchorpoint , bool isFlipX, bool isFlipY);
+	/// <param name="texnumber">ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·</param>
+	/// <param name="filename">ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«å</param>
+	/// <returns>æˆå¦</returns>
+	static bool LoadTexture(UINT texnumber, const wchar_t*filename);
 
 	/// <summary>
-	/// ’¸“_ƒoƒbƒtƒ@‚Ì“]‘—
+	/// æç”»å‰å‡¦ç†
 	/// </summary>
-	void TransferVertexBuffer();
-
+	/// <param name="cmdList">æç”»ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ</param>
+	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
-	/// •`‰æ
+	/// æç”»å¾Œå‡¦ç†
+	/// </summary>
+	static void PostDraw();
+
+	/// <summary>
+	/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”Ÿæˆ
+	/// </summary>
+	/// <param name="texNumber">ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·</param>
+	/// <param name="position">åº§æ¨™</param>
+	/// <param name="color">è‰²</param>
+	/// <param name="anchorpoint">ã‚¢ãƒ³ã‚«ãƒ¼ãƒã‚¤ãƒ³ãƒˆ</param>
+	/// <param name="isFlipX">å·¦å³åè»¢</param>
+	/// <param name="isFlipY">ä¸Šä¸‹åè»¢</param>
+	/// <returns>ç”Ÿæˆã•ã‚ŒãŸã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ</returns>
+	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
+
+protected: // é™çš„ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®æœ€å¤§æšæ•°
+	static const int srvCount = 512;
+	// é ‚ç‚¹æ•°
+	static const int vertNum = 4;
+	// ãƒ‡ãƒã‚¤ã‚¹
+	static ID3D12Device* device;
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚µã‚¤ã‚º
+	static UINT descriptorHandleIncrementSize;
+	// ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆ
+	static ID3D12GraphicsCommandList* cmdList;
+	// ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£
+	static ComPtr<ID3D12RootSignature> rootSignature;
+	// ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	static ComPtr<ID3D12PipelineState> pipelineState;
+	// å°„å½±è¡Œåˆ—
+	static XMMATRIX matProjection;
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
+	static ComPtr<ID3D12DescriptorHeap> descHeap;
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒƒãƒ•ã‚¡
+	static ComPtr<ID3D12Resource> texBuff[srvCount];
+
+public: // ãƒ¡ãƒ³ãƒé–¢æ•°
+	/// <summary>
+	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// </summary>
+	Sprite(UINT texNumber, XMFLOAT2 position, XMFLOAT2 size, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY);
+	
+	/// <summary>
+	/// åˆæœŸåŒ–
+	/// </summary>
+	/// <returns>æˆå¦</returns>
+	bool Initialize();
+
+	/// <summary>
+	/// è§’åº¦ã®è¨­å®š
+	/// </summary>
+	/// <param name="rotation">è§’åº¦</param>
+	void SetRotation(float rotation);
+
+	/// <summary>
+	/// åº§æ¨™ã®å–å¾—
+	/// </summary>
+	/// <returns>åº§æ¨™</returns>
+	const XMFLOAT2& GetPosition() { return position; }
+
+	/// <summary>
+	/// åº§æ¨™ã®è¨­å®š
+	/// </summary>
+	/// <param name="position">åº§æ¨™</param>
+	void SetPosition(XMFLOAT2 position);
+	
+	/// <summary>
+	/// ã‚µã‚¤ã‚ºã®è¨­å®š
+	/// </summary>
+	/// <param name="size">ã‚µã‚¤ã‚º</param>
+	void SetSize(XMFLOAT2 size);
+
+	/// <summary>
+	/// ã‚¢ãƒ³ã‚«ãƒ¼ãƒã‚¤ãƒ³ãƒˆã®è¨­å®š
+	/// </summary>
+	/// <param name="anchorpoint">ã‚¢ãƒ³ã‚«ãƒ¼ãƒã‚¤ãƒ³ãƒˆ</param>
+	void SetAnchorPoint(XMFLOAT2 anchorpoint);
+
+	/// <summary>
+	/// å·¦å³åè»¢ã®è¨­å®š
+	/// </summary>
+	/// <param name="isFlipX">å·¦å³åè»¢</param>
+	void SetIsFlipX(bool isFlipX);
+
+	/// <summary>
+	/// ä¸Šä¸‹åè»¢ã®è¨­å®š
+	/// </summary>
+	/// <param name="isFlipX">ä¸Šä¸‹åè»¢</param>
+	void SetIsFlipY(bool isFlipY);
+
+	/// <summary>
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç¯„å›²è¨­å®š
+	/// </summary>
+	/// <param name="texBase">ãƒ†ã‚¯ã‚¹ãƒãƒ£å·¦ä¸Šåº§æ¨™</param>
+	/// <param name="texSize">ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚µã‚¤ã‚º</param>
+	void SetTextureRect(XMFLOAT2 texBase, XMFLOAT2 texSize);
+
+	/// <summary>
+	/// æç”»
 	/// </summary>
 	void Draw();
 
+protected: // ãƒ¡ãƒ³ãƒå¤‰æ•°
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
+	ComPtr<ID3D12Resource> vertBuff;
+	// å®šæ•°ãƒãƒƒãƒ•ã‚¡
+	ComPtr<ID3D12Resource> constBuff;
+	// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
+	D3D12_VERTEX_BUFFER_VIEW vbView{};
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç•ªå·
+	UINT texNumber = 0; 
+	// Zè»¸å›ã‚Šã®å›è»¢è§’
+	float rotation = 0.0f;
+	// åº§æ¨™
+	XMFLOAT2 position{};
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå¹…ã€é«˜ã•
+	XMFLOAT2 size = { 100.0f, 100.0f };
+	// ã‚¢ãƒ³ã‚«ãƒ¼ãƒã‚¤ãƒ³ãƒˆ
+	XMFLOAT2 anchorpoint = { 0, 0 };
+	// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—
+	XMMATRIX matWorld{};		
+	// è‰²
+	XMFLOAT4 color = { 1, 1, 1, 1 }; 
+	// å·¦å³åè»¢
+	bool isFlipX = false;
+	// ä¸Šä¸‹åè»¢
+	bool isFlipY = false;
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£å§‹ç‚¹
+	XMFLOAT2 texBase = { 0, 0 };
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£å¹…ã€é«˜ã•
+	XMFLOAT2 texSize = { 100.0f, 100.0f };
+
+private: // ãƒ¡ãƒ³ãƒé–¢æ•°
 	/// <summary>
-	/// –ˆƒtƒŒ[ƒ€XVˆ—
+	/// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿è»¢é€
 	/// </summary>
-	void Update();
-
-	void SetPosition(const DirectX::XMFLOAT3& position) { position_ = position; }
-	void SetRotation(float rotation) { rotation_ = rotation; }
-	void SetSize(const DirectX::XMFLOAT2& size) { size_ = size; }
-	void SetTexLeftTop(const DirectX::XMFLOAT2& texLeftTop) { texLeftTop_ = texLeftTop; }
-	void SetTexSize(const DirectX::XMFLOAT2& texSize) { texSize_ = texSize; }
-
-	protected:
-	//’¸“_ƒoƒbƒtƒ@
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertBuff_;
-
-	//’¸“_ƒoƒbƒtƒ@ƒrƒ…[
-	D3D12_VERTEX_BUFFER_VIEW vbView_{};
-
-	//’è”ƒoƒbƒtƒ@
-	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
-
-	//z²‚Ü‚í‚è‚Ì‰ñ“]Šp
-	float rotation_ = 0.0f;
-
-	//À•W
-	DirectX::XMFLOAT3 position_ = { 0, 0, 0 };
-
-	//ƒ[ƒ‹ƒhÀ•W
-	DirectX::XMMATRIX matWorld_;
-
-	//F(RGBA)
-	DirectX::XMFLOAT4 color_ = { 1, 1, 1, 1 };
-
-	//ƒeƒNƒXƒ`ƒƒ”Ô†
-	UINT texNumber_ = 0;
-
-	//‘å‚«‚³
-	DirectX::XMFLOAT2 size_ = { 100, 200 };
-
-	//ƒAƒ“ƒJ[ƒ|ƒCƒ“ƒg
-	DirectX::XMFLOAT2 anchorpoint_ = { 0.5f, 0.5f };
-
-	//¶‰E”½“]
-	bool isFlipX_ = false;
-
-	//ã‰º”½“]
-	bool isFlipY_ = false;
-
-	//ƒeƒNƒXƒ`ƒƒ¶ãÀ•W
-	DirectX::XMFLOAT2 texLeftTop_ = { 0, 0 };
-
-	//ƒeƒNƒXƒ`ƒƒØ‚èo‚µƒTƒCƒY
-	DirectX::XMFLOAT2 texSize_ = { 200, 200 };
-
-	//”ñ•\¦
-	bool isInvisible_ = false;
-
+	void TransferVertices();
 };
 
