@@ -80,6 +80,9 @@ void GamePlayScene::Initialize()
 		object1->Initialize();
 		object1->SetModel(model1);
 
+		object1->SetPosition({ 0, 0, -45 });
+		object1->SetRotation({ 0, 0, 0 });
+
 		//カメラ注視点をセット
 		camera->SetTarget({ 0, 0, 0 });
 
@@ -147,26 +150,38 @@ void GamePlayScene::Update()
 	//座標操作
 	if (Input::GetInstance()->PushKey(DIK_UP) || Input::GetInstance()->PushKey(DIK_DOWN) || Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT))
 	{
-			DirectX::XMFLOAT3 pos = object3d_1->GetPosition();
+	//		DirectX::XMFLOAT3 pos = object3d_1->GetPosition();
 
-			//pos.x += 1.0f;
+	//		//pos.x += 1.0f;
 
-			object3d_1->SetPosition(pos);
+	//		object3d_1->SetPosition(pos);
+
+		XMFLOAT3 rotation = object1->GetRotation();
 
 			if (Input::GetInstance()->PushKey(DIK_DOWN))
 			{
-				camera->CameraMoveVector({ 0, 0, -1.0f });
+				rotation.x -= 1.0f;
+				object1->SetRotation(rotation);
 			}
 
-			if (Input::GetInstance()->PushKey(DIK_UP))
+			else if (Input::GetInstance()->PushKey(DIK_UP))
 			{
-				camera->CameraMoveVector({ 0, 0, +1.0f });
+				rotation.x += 1.0f;
+				object1->SetRotation(rotation);
 			}
 
-			if (Input::GetInstance()->PushKey(DIK_LEFT))
+			else if (Input::GetInstance()->PushKey(DIK_LEFT))
 			{
-				camera->CameraMoveVector({ 0, +1.0f, 0 });
+				rotation.y += 1.0f;
+				object1->SetRotation(rotation);
 			}
+
+			else if (Input::GetInstance()->PushKey(DIK_RIGHT))
+			{
+				rotation.y -= 1.0f;
+				object1->SetRotation(rotation);
+			}
+		
 	}
 
 
