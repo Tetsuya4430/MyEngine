@@ -5,6 +5,7 @@
 #include <wrl.h>
 
 #include "WinApp.h"
+#include <imgui.h>
 
 using namespace Microsoft::WRL;
 
@@ -55,4 +56,8 @@ private:
 	ComPtr<ID3D12Device> dev;
 	//DXGIファクトリ
 	ComPtr<IDXGIFactory6> dxgiFactory;
+	//imgui
+	ComPtr<ID3D12DescriptorHeap> imguiHeap;
+
+	bool InitImgui();
 };

@@ -9,6 +9,7 @@
 #include "Audio.h"
 #include "SceneManager.h"
 #include "AbstractSceneFactory.h"
+#include "LightGroup.h"
 
 
 /// <summary>

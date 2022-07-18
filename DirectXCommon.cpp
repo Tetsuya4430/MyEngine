@@ -1,5 +1,7 @@
 #include "DirectXCommon.h"
 #include <cassert>
+#include <imgui_impl_win32.h>
+#include <imgui_impl_dx12.h>
 
 #pragma comment(lib, "d3d12.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -248,6 +250,10 @@ void DirectXCommon::Initialize(WinApp* winApp)
 
 	result = dev->CreateFence(fenceVal, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 
+	if (!InitImgui()) {
+		assert(0);
+	}
+
 }
 
 void DirectXCommon::PreDraw()
@@ -303,11 +309,18 @@ void DirectXCommon::PreDraw()
 //
 	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height));
 
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 }
 
 void DirectXCommon::PostDraw()
 {
-	
+	ImGui::Render();
+	ID3D12DescriptorHeap* ppHeaps[] = { imguiHeap.Get() };
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList.Get());
 
 	//バックバッファの番号を取得
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
@@ -348,4 +361,50 @@ void DirectXCommon::PostDraw()
 	cmdAllocator->Reset();	//キューをクリア
 	cmdList->Reset(cmdAllocator.Get(), nullptr);	//再びコマンドリストを貯める準備
 #pragma endregion
+}
+
+bool DirectXCommon::InitImgui()
+{
+	HRESULT result = S_FALSE;
+
+	// デスクリプタヒープを生成
+	D3D12_DESCRIPTOR_HEAP_DESC heapDesc{};
+	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	heapDesc.NumDescriptors = 1;
+	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	result = dev->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&imguiHeap));
+	if (FAILED(result)) {
+		assert(0);
+		return false;
+	}
+
+	// スワップチェーンの情報を取得
+	DXGI_SWAP_CHAIN_DESC swcDesc = {};
+	result = swapchain->GetDesc(&swcDesc);
+	if (FAILED(result)) {
+		assert(0);
+		return false;
+	}
+
+	if (ImGui::CreateContext() == nullptr) {
+		assert(0);
+		return false;
+	}
+	if (!ImGui_ImplWin32_Init(winApp->GetHwnd())) {
+		assert(0);
+		return false;
+	}
+	if (!ImGui_ImplDX12_Init(
+		GetDev(),
+		swcDesc.BufferCount,
+		swcDesc.BufferDesc.Format,
+		imguiHeap.Get(),
+		imguiHeap->GetCPUDescriptorHandleForHeapStart(),
+		imguiHeap->GetGPUDescriptorHandleForHeapStart()
+	)) {
+		assert(0);
+		return false;
+	}
+
+	return true;
 }

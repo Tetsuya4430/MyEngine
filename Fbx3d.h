@@ -9,6 +9,7 @@
 #include <DirectXMath.h>
 #include <string>
 #include "DirectXCommon.h"
+#include "LightGroup.h"
 
 
 class Fbx3d
@@ -65,7 +66,15 @@ public:	//メンバ関数
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-protected://メンバ変数
+	/// <summary>
+	/// ライトグループのセット
+	/// </summary>
+	/// <param name="lightGroup">ライトグループ</param>
+	static void SetLightGroup(LightGroup* lightGroup) {
+		Fbx3d::lightGroup = lightGroup;
+	}
+
+	private://メンバ変数
 	ComPtr<ID3D12Resource> constBuffTransform;
 
 	//ローカルスケール
@@ -78,5 +87,8 @@ protected://メンバ変数
 	XMMATRIX matWorld;
 	//モデル
 	FbxModel* fbxmodel = nullptr;
+
+	// ライト
+	static LightGroup* lightGroup;
 };
 

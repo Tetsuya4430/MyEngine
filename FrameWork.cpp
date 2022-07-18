@@ -60,6 +60,8 @@ void FrameWork::Initialize()
 	//FBXローダーの初期化処理
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
 
+	// ライト静的初期化
+	LightGroup::StaticInitialize(dxCommon->GetDev());
 }
 
 void FrameWork::Finalize()

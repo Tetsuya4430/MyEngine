@@ -10,6 +10,7 @@ ID3D12Device* Fbx3d::device = nullptr;
 Camera* Fbx3d::camera = nullptr;
 ComPtr<ID3D12RootSignature> Fbx3d::rootsignature;
 ComPtr<ID3D12PipelineState> Fbx3d::pipelinestate;
+LightGroup* Fbx3d::lightGroup = nullptr;
 
 void Fbx3d::Initialize()
 {
@@ -86,6 +87,9 @@ void Fbx3d::Draw(ID3D12GraphicsCommandList* cmdList)
 	//定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0,
 		constBuffTransform->GetGPUVirtualAddress());
+
+	//ライトのグラフィックスコマンド
+	lightGroup->Draw(cmdList, 3);
 
 	//モデル描画
 	fbxmodel->Draw(cmdList);
@@ -209,15 +213,23 @@ void Fbx3d::CreateGraphicsPipeline()
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
-	CD3DX12_DESCRIPTOR_RANGE descRangeSRV;
-	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
+	CD3DX12_DESCRIPTOR_RANGE descRangeSRVs[4];
+	descRangeSRVs[0].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
+	descRangeSRVs[1].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1); // t1 レジスタ
+	descRangeSRVs[2].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 2); // t2 レジスタ
+	descRangeSRVs[3].Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 3); // t3 レジスタ
 
 	// ルートパラメータ
-	CD3DX12_ROOT_PARAMETER rootparams[2];
+	CD3DX12_ROOT_PARAMETER rootparams[4];
 	// CBV（座標変換行列用）
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	// SRV（テクスチャ）
-	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[1].InitAsDescriptorTable(_countof(descRangeSRVs), descRangeSRVs, D3D12_SHADER_VISIBILITY_ALL);
+	// CBV（マテリアル用） b1レジスタ
+	rootparams[2].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
+	// CBV（ライト用） b2レジスタ
+	rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
+
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);

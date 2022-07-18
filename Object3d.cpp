@@ -57,10 +57,10 @@ void Object3d::PreDraw()
 	//// コマンドリストをセット
 	//Object3d::cmdList = cmdList;
 
-	// パイプラインステートの設定
-	cmdList->SetPipelineState(pipelinestate.Get());
-	// ルートシグネチャの設定
-	cmdList->SetGraphicsRootSignature(rootsignature.Get());
+	//// パイプラインステートの設定
+	//cmdList->SetPipelineState(pipelinestate.Get());
+	//// ルートシグネチャの設定
+	//cmdList->SetGraphicsRootSignature(rootsignature.Get());
 	// プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

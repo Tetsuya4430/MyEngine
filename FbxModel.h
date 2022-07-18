@@ -27,6 +27,18 @@ struct Node
 	Node* parent = nullptr;
 };
 
+struct TextureData
+{
+	//テクスチャデータ
+	DirectX::TexMetadata metadata = {};
+	//スクラッチイメージ
+	DirectX::ScratchImage scratchImg = {};
+	//テクスチャバッファ
+	Microsoft::WRL::ComPtr<ID3D12Resource> texBuff;
+	//SRVのGPUハンドル
+	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuHandle;
+};
+
 class FbxModel
 {
 public:
@@ -61,6 +73,34 @@ public:	//サブクラス
 		DirectX::XMFLOAT2 uv;
 	};
 
+	struct ConstBufferDataMaterial
+	{
+		//アルベド
+		DirectX::XMFLOAT3 baseColor;
+		//金属度
+		float metalness;
+		//鏡面反射強度
+		float specular;
+		//粗さ
+		float roughness;
+		//パディング(16Byte境界)
+		float pad[2];
+	};
+
+
+public:	//定数
+	//テクスチャの最大数
+	static const int MAX_TEXTURES = 4;
+
+	//ベーステクスチャ
+	TextureData baseTexture;
+	//メタルネステクスチャ
+	TextureData metalnessTexture;
+	//法線テクスチャ
+	TextureData normalTexture;
+	//ラフネステクスチャ
+	TextureData roughnessTexture;
+
 	//メッシュを持つノード
 	Node* meshNode = nullptr;
 
@@ -76,11 +116,11 @@ public:	//サブクラス
 	//デフューズ係数
 	DirectX::XMFLOAT3 diffuse = { 1, 1, 1 };
 
-	//テクスチャメタデータ
-	DirectX::TexMetadata metadata = {};
+	////テクスチャメタデータ
+	//DirectX::TexMetadata metadata = {};
 
-	//スクラッチイメージ
-	DirectX::ScratchImage scratchImg = {};
+	////スクラッチイメージ
+	//DirectX::ScratchImage scratchImg = {};
 
 public:
 	//メンバ関数
@@ -95,6 +135,39 @@ public:
 		return meshNode->globalTransform;
 	}
 
+	//getter
+	const DirectX::XMFLOAT3& GetBaseColor() { return baseColor; }
+
+	float GetMetalness() { return metalness; }
+	float GetSpecular() { return specular; }
+	float GetRoughness() { return roughness; }
+
+	//setter
+	void SetBaseColor(const DirectX::XMFLOAT3& baseColor)
+	{
+		this->baseColor = baseColor;
+	}
+
+	void SetMetalness(float metalness)
+	{
+		this->metalness = metalness;
+	}
+
+	void SetSpecular(float specular)
+	{
+		this->specular = specular;
+	}
+
+	void SetRoughness(float roughness)
+	{
+		this->roughness = roughness;
+	}
+
+	//マテリアルパラメータ転送
+	void TransferMaterial();
+
+	void CreateTexture(TextureData& texture, ID3D12Device* device, int srvIndex);
+
 private:
 	//モデル名
 	std::string name;
@@ -106,13 +179,28 @@ private:
 	ComPtr<ID3D12Resource> vertBuff;
 	//インデックスバッファ
 	ComPtr<ID3D12Resource> indexBuff;
-	//テクスチャバッファ
-	ComPtr<ID3D12Resource> texBuff;
+	////テクスチャバッファ
+	//ComPtr<ID3D12Resource> texBuff;
 	//頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView = {};
 	//インデックスバッファビュー
 	D3D12_INDEX_BUFFER_VIEW ibView = {};
 	//SRV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
+
+	//アルベド
+	DirectX::XMFLOAT3 baseColor = { 1, 1, 1 };
+
+	//金属度
+	float metalness = 0.0f;
+
+	//鏡面反射強度
+	float specular = 0.5f;
+
+	//粗さ
+	float roughness = 0.0f;
+
+	//定数バッファ
+	ComPtr<ID3D12Resource> constBuffMaterial;
 };
 

@@ -8,6 +8,11 @@
 #include "FrameWork.h"
 
 
+static float baseColor[3];
+static float metalness;
+static float specular;
+static float roughness;
+
 GamePlayScene::GamePlayScene()
 {
 }
@@ -68,17 +73,40 @@ void GamePlayScene::Initialize()
 
 		//モデルを指定してFBXファイルを読み込み
 		//FbxLoader::GetInstance()->LoadModelFromFile("cube");
-		model1 = FbxLoader::GetInstance()->LoadModelFromFile("cube");
+		model1 = FbxLoader::GetInstance()->LoadModelFromFile("SpherePBRMaps");
 
 		//3dオブジェクト生成とモデルのセット
 		object1 = new Fbx3d;
 		object1->Initialize();
 		object1->SetModel(model1);
 
-
-
 		//カメラ注視点をセット
-		camera->SetTarget({ 0, 20, 0 });
+		camera->SetTarget({ 0, 0, 0 });
+
+		// ライト生成
+		lightGroup = LightGroup::Create();
+		// 3Dオブエクトにライトをセット
+		Fbx3d::SetLightGroup(lightGroup);
+
+		lightGroup->SetDirLightActive(0, true);
+		lightGroup->SetDirLightActive(1, true);
+		lightGroup->SetDirLightActive(2, true);
+	/*	lightGroup->SetPointLightActive(0, true);
+		pointLightPos[0] = 0.5f;
+		pointLightPos[1] = 1.0f;
+		pointLightPos[2] = 0.0f;*/
+		lightGroup->SetPointLightActive(0, false);
+		lightGroup->SetPointLightActive(1, false);
+		lightGroup->SetPointLightActive(2, false);
+		lightGroup->SetCircleShadowActive(0, true);
+
+		//マテリアルパラメーターの初期値を取得
+		baseColor[0] = model1->GetBaseColor().x;
+		baseColor[1] = model1->GetBaseColor().y;
+		baseColor[2] = model1->GetBaseColor().z;
+		metalness = model1->GetMetalness();
+		specular = model1->GetSpecular();
+		roughness = model1->GetRoughness();
 
 	//音声読み込みと再生
 	Audio::GetInstance()->LoadWave("Alarm01.wav");
@@ -147,6 +175,32 @@ void GamePlayScene::Update()
 	objectManager_2->Update();
 	objectManager_3->Update();
 
+	//ライト更新
+	/*lightGroup->SetPointLightPos(0, XMFLOAT3(pointLightPos));
+	lightGroup->SetPointLightColor(0, XMFLOAT3(pointLightColor));
+	lightGroup->SetPointLightAtten(0, XMFLOAT3(pointLightAtten));*/
+
+	//lightGroup->SetSpotLightDir(0, XMVECTOR({ spotLightDir[0], spotLightDir[1], spotLightDir[2], 0 }));
+	//lightGroup->SetSpotLightPos(0, XMFLOAT3(spotLightPos));
+	//lightGroup->SetSpotLightColor(0, XMFLOAT3(spotLightColor));
+	//lightGroup->SetSpotLightAtten(0, XMFLOAT3(spotLightAtten));
+	//lightGroup->SetSpotLightFactorAngle(0, XMFLOAT2(spotLightFactorAngle));
+
+	lightGroup->SetCircleShadowDir(0, XMVECTOR({ circleShadowDir[0], circleShadowDir[1], circleShadowDir[2], 0 }));
+	lightGroup->SetCircleShadowCasterPos(0, XMFLOAT3(fighterPos[0], fighterPos[1], fighterPos[2]));
+	lightGroup->SetCircleShadowAtten(0, XMFLOAT3(circleShadowAtten));
+	lightGroup->SetCircleShadowFactorAngle(0, XMFLOAT2(circleShadowFactorAngle));
+
+	//ライトグループをセット
+	Fbx3d::SetLightGroup(lightGroup);
+
+	//マテリアルパラメータをモデルに反映
+	model1->SetBaseColor(XMFLOAT3(baseColor));
+	model1->SetMetalness(metalness);
+	model1->SetSpecular(specular);
+	model1->SetRoughness(roughness);
+	model1->TransferMaterial();
+
 	//FBXオブジェクトの更新
 	object1->Update();
 	
@@ -155,7 +209,6 @@ void GamePlayScene::Update()
 
 	//カメラの更新
 	camera->Update();
-
 
 	//Escキーでウィンドウを閉じる
 	if (Input::GetInstance()->TriggerKey(DIK_ESCAPE))	//ESCキーでウィンドウを閉じる
@@ -180,9 +233,9 @@ void GamePlayScene::Draw()
 	Object3d::PreDraw();
 
 	////3Dオブジェクトの描画
-	objectManager_1->Draw();
+	/*objectManager_1->Draw();
 	objectManager_2->Draw();
-	objectManager_3->Draw();
+	objectManager_3->Draw();*/
 
 	//FBXオブジェクトの描画
 	object1->Draw(cmdList);
@@ -193,6 +246,18 @@ void GamePlayScene::Draw()
 
 	////スプライトの共通コマンド
 	SpriteCommon::GetInstance()->PreDraw();
+
+
+	//Imgui描画
+	ImGui::Begin("Material");
+	ImGui::SetWindowPos(ImVec2(0, 0));
+	ImGui::SetWindowSize(ImVec2(300, 130));
+	ImGui::ColorEdit3("baseColor", baseColor, ImGuiColorEditFlags_Float);
+	ImGui::SliderFloat("metalness", &metalness, 0, 1);
+	ImGui::SliderFloat("specular", &specular, 0, 1);
+	ImGui::SliderFloat("roughness", &roughness, 0, 1);
+	ImGui::End();
+
 
 	//////スプライト描画
 	//sprite->Draw();
